@@ -20,8 +20,23 @@ var oauther = require('oauther');
 
 var oauth = oauther('consumer', 'token');
 
-req = oauth.sign(req);
+var request = {
+    hostname : 'example.com',
+    path : '/oauther',
+    method : 'GET'
+};
 
+var signature = oauth.sign(request);
+
+// header formatted signature
+req.header('Authorization', signature.toHeader());
+
+// query formatted signature
+var query = signature.toQuery();
+
+...
+
+// validate an incoming signature
 if (oauth.validate(req)) {
   console.log('Valid!');
 }
