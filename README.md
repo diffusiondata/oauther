@@ -44,7 +44,7 @@ var query = signature.toQuery();
 
 ...
 
-// validate an incoming signature
+// validate an incoming request
 if (oauth.validate(req)) {
   console.log('Valid!');
 }
