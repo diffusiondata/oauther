@@ -1,8 +1,45 @@
 var crypto = require('crypto');
-var url = require('url');
 var qs = require('querystring');
 
 var config;
+
+function generateParameterString(params, ignore_sig) {
+    var paramString = '';
+
+    Object.keys(params).sort().forEach(function(key) {
+        if (!ignore_sig || key !== 'oauth_signature') {
+            var val = params[key];
+            paramString += (paramString ? '&' : '');
+            paramString += key + '=' + qs.escape(val);
+        }
+    });
+    return paramString;
+};
+
+function getOAuthHeader(params) {
+    var header = '';
+
+    for (var key in params) {
+        header += (header ? ', ' : '') + key + '="' + qs.escape(params[key])+'"';
+    }
+    return 'OAuth '+header;
+};
+
+function oauthSignature(signatureParams) {
+    var params = signatureParams;
+
+    var self = this;
+
+    self.toForm = function() {
+        return generateParameterString(params);
+    };
+
+    self.toHeader = function() {
+        return getOAuthHeader(params);
+    };
+
+    return self;
+};
 
 function oauther(config) {
     var self = this;
@@ -12,18 +49,18 @@ function oauther(config) {
     this.nonce_length = config.nonce_length || 32;
     this.version = "1.0";
 
-    function parseParameters(params) {
-        var paramString = '';
+    function parseParameterString(param) {
+        var result = {};
 
-        Object.keys(params).sort().forEach(function(key) {
-            if (key !== 'oauth_signature') {
-                var val = params[key];
-                paramString += (paramString ? '&' : '');
-                paramString += key + '=' + qs.escape(val);
-            }
-        });
+        param = qs.unescape(param);
 
-        return paramString;
+        var params = param.split('&');
+        for(var i=0; i<params.length; i++) {
+            var key = params[i].split('=')[0];
+            var val = params[i].split('=')[1];
+            result[key] = val;
+        }
+        return result;
     };
 
     function getAllParams(req) {
@@ -35,8 +72,7 @@ function oauther(config) {
         for (var key in req.query) {
             params[key] = req.query[key];
         }
-
-        var oauthparams = getOAuthHeaderParams(req);
+        var oauthparams = getOAuthHeaderParams(req.header);
         for (var key in oauthparams) {
             params[key] = oauthparams[key];
         }
@@ -44,12 +80,12 @@ function oauther(config) {
         return params;
     };
 
-    function getOAuthHeaderParams(req) {
+    function getOAuthHeaderParams(header) {
         var oauthParams = {};
 
-        var authHeader = req.header('Authorization');
-        if(authHeader && authHeader.match(/^OAuth/)) {
-            var params = authHeader.match(/[^=\s]+="[^"]*"(?:)?/g);
+
+        if(header && header('Authorization').match(/^OAuth/)) {
+            var params = header('Authorization').match(/[^=\s]+="[^"]*"(?:)?/g);
             params.forEach(function(p) {
                 var kv = p.split('=');
                 oauthParams[qs.unescape(kv[0])] = qs.unescape(kv[1].match(/[^"]{1,}[^"]/)[0]);
@@ -58,24 +94,14 @@ function oauther(config) {
         return oauthParams;
     };
 
-    function getOAuthHeader(params) {
-        var header = '';
-
-        for (var key in params) {
-            header += (header ? ', ' : '') + key + '="' + qs.escape(params[key])+'"';
-        }
-        return 'OAuth '+header;
-    };
-
     function parseURL(req) {
-        var host = req.hostname;
+        var host = req.hostname || req.header('Host');
         var port = req.port;
-        var protocol = req.protocol;
         var path = req.path;
 
-        var baseURL = protocol + '://' + host;
+        var baseURL = (req.protocol ? req.protocol : 'http') + '://' + host;
 
-        if (port && (protocol !== 'http' || protocol !== 'https')) {
+        if (port) {
             baseURL += ':' + port;
         }
 
@@ -107,7 +133,8 @@ function oauther(config) {
     };
 
     function calculateSignature(method, baseURL, params) {
-        var baseString = method.toUpperCase() + '&' + qs.escape(baseURL) + '&' + qs.escape(parseParameters(params));
+        var baseString = method.toUpperCase() + '&' + qs.escape(baseURL) + '&' +
+            qs.escape(generateParameterString(params, true));
 
         var csecret = config.consumer ? config.consumer.secret : '';
         var tsecret = config.token ? config.token.secret : '';
@@ -128,17 +155,27 @@ function oauther(config) {
         }
     };
 
-    function updateHeader(req, params) {
-        req.header('Authorization', getOAuthHeader(params));
-        return req;
-    };
-
+    /**
+     * Sign OAuth request
+     * @param  {Object} request data
+     * {
+     *      hostname,
+     *      port, // optional
+     *      path,
+     *      protocol, // default 'http'
+     *      query, // query string
+     *      method,
+     *      body
+     * }
+     * @return {Object} OAuth data object
+     */
     this.sign = function(req) {
         var method = req.method;
         var baseURL = parseURL(req);
-        var params = getAllParams(req);
-        var oauthParams = generateSignature(method, baseURL, params);
-        return updateHeader(req, oauthParams);
+        var params = params = getAllParams(req);
+        var oauthParams = generateSignature(method, baseURL, {});
+
+        return oauthSignature(oauthParams);
     };
 
     this.validate = function(req) {
@@ -146,11 +183,9 @@ function oauther(config) {
         var baseURL = parseURL(req);
         var params = getAllParams(req);
 
-        var oauthparams = getAllParams(req);
-
         var expect = calculateSignature(method, baseURL, params);
 
-        return oauthparams['oauth_signature'] === expect;
+        return params['oauth_signature'] === expect;
     };
 
     return self;
