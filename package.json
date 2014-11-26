@@ -1,0 +1,32 @@
+{
+  "name": "oauther",
+  "version": "0.0.1",
+  "description": "OAuth 1.0 signature generation and validation",
+  "keywords": [
+    "oauth",
+    "signature",
+    "security"
+  ],
+  "homepage": "https://github.com/tommclaughlan/oauther",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tommclaughlan/oauther.git"
+  },
+  "author": "Tom McLaughlan",
+  "license": "Apache-2.0",
+  "main": "oauther.js",
+  "files": [
+    "README.md",
+    "LICENSE.txt",
+    "oauther.js",
+    "spec"
+  ],
+  "scripts": {
+      "test" : "jasmine"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "jasmine": "~2.1.0",
+    "saywhen": "0.0.2"
+  }
+}
