@@ -1,5 +1,6 @@
 oauther
 =======
+[![Build Status](https://travis-ci.org/tommclaughlan/oauther.svg?branch=master)](https://travis-ci.org/tommclaughlan/oauther)
 
 Simple OAuth 1.0 signature generation/validation.
 
