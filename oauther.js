@@ -47,7 +47,7 @@ function oauther(config) {
     this.token = config.token;
     this.signature_method = config.signature_method || 'HMAC-SHA1';
     this.nonce_length = config.nonce_length || 32;
-    this.version = "1.0";
+    this.version = '1.0';
 
     function parseParameterString(param) {
         var result = {};
