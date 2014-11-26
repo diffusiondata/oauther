@@ -83,7 +83,6 @@ function oauther(config) {
     function getOAuthHeaderParams(header) {
         var oauthParams = {};
 
-
         if(header && header('Authorization').match(/^OAuth/)) {
             var params = header('Authorization').match(/[^=\s]+="[^"]*"(?:)?/g);
             params.forEach(function(p) {
