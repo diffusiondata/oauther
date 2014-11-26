@@ -44,4 +44,4 @@ if (oauth.validate(req)) {
 
 Notes
 -----
-TODO: Clean up the tests. Add support for RSA-SHA1. Add support for plain Node.js http.
+TODO: Add support for RSA-SHA1. Add support for plain Node.js http.
