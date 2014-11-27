@@ -1,8 +1,6 @@
 var crypto = require('crypto');
 var qs = require('querystring');
 
-var config;
-
 function generateParameterString(params, ignore_sig) {
     var paramString = '';
 
@@ -84,10 +82,10 @@ function oauther(config) {
         var oauthParams = {};
 
         if(header && header('Authorization').match(/^OAuth/)) {
-            var params = header('Authorization').match(/[^=\s]+="[^"]*"(?:)?/g);
+            var params = header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
             params.forEach(function(p) {
-                var kv = p.split('=');
-                oauthParams[qs.unescape(kv[0])] = qs.unescape(kv[1].match(/[^"]{1,}[^"]/)[0]);
+                var kv = p.match(/([^=\s]+)="([^"]*)"/);
+                oauthParams[qs.unescape(kv[1])] = qs.unescape(kv[2].replace(/"/g,''));
             });
         }
         return oauthParams;
@@ -145,9 +143,11 @@ function oauther(config) {
         }
         else if (params['oauth_signature_method'] === 'HMAC-SHA1') {
             var hmac = crypto.createHmac('sha1', keyString);
-            hmac.update(baseString);
-
-            return hmac.digest('base64');
+            return hmac.update(baseString).digest('base64');
+        }
+        else if (params['oauth_signature_method'] === 'RSA-SHA1') {
+            var rsa = crypto.createSign('RSA-SHA1');
+            return rsa.update(baseString).sign(csecret, 'base64');
         }
         else {
             throw 'oauther :: Unsupported signature method : ' + params['oauth_signature_method'];
@@ -188,7 +188,7 @@ function oauther(config) {
         var params = getAllParams(req);
 
         var expect = calculateSignature(method, baseURL, params);
-
+        console.log(params['oauth_signature_method']);
         return params['oauth_signature'] === expect;
     };
 
