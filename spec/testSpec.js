@@ -27,7 +27,8 @@ describe('HMAC-SHA1', function() {
     });
 
     it('generates and validates the signature', function() {
-        var header = oauth.sign(request).toHeader();
+        var sig = oauth.sign(request);
+        var header = sig.toHeader();
 
         var req = jasmine.createSpyObj('req', ['header']);
         when(req.header).isCalledWith('Authorization').thenReturn(header);
@@ -36,6 +37,7 @@ describe('HMAC-SHA1', function() {
         req.protocol = 'http';
         req.path = '/oauther';
 
+        expect(sig.signature_method).toEqual('HMAC-SHA1');
         expect(oauth.validate(req)).toEqual(true);
     });
 
@@ -75,7 +77,8 @@ describe('PLAINTEXT', function() {
     });
 
     it('generates and validates the signature', function() {
-        var header = oauth.sign(request).toHeader();
+        var sig = oauth.sign(request);
+        var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
         req.method = 'GET';
@@ -83,6 +86,7 @@ describe('PLAINTEXT', function() {
         req.protocol = 'http';
         req.path = '/oauther';
 
+        expect(sig.signature_method).toEqual('PLAINTEXT');
         expect(oauth.validate(req)).toEqual(true);
     });
 

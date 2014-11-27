@@ -1,6 +1,6 @@
 {
   "name": "oauther",
-  "version": "0.0.5",
+  "version": "0.0.8",
   "description": "OAuth 1.0 signature generation and validation",
   "keywords": [
     "oauth",

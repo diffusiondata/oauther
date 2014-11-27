@@ -36,6 +36,10 @@ function oauthSignature(signatureParams) {
         return getOAuthHeader(params);
     };
 
+    self.toObject = function() {
+        return params;
+    }
+
     return self;
 };
 
@@ -70,7 +74,7 @@ function oauther(config) {
         for (var key in req.query) {
             params[key] = req.query[key];
         }
-        var oauthparams = getOAuthHeaderParams(req.header);
+        var oauthparams = getOAuthHeaderParams(req);
         for (var key in oauthparams) {
             params[key] = oauthparams[key];
         }
@@ -78,11 +82,11 @@ function oauther(config) {
         return params;
     };
 
-    function getOAuthHeaderParams(header) {
+    function getOAuthHeaderParams(req) {
         var oauthParams = {};
 
-        if(header && header('Authorization').match(/^OAuth/)) {
-            var params = header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
+        if(req.header && req.header('Authorization').match(/^OAuth/)) {
+            var params = req.header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
             params.forEach(function(p) {
                 var kv = p.match(/([^=\s]+)="([^"]*)"/);
                 oauthParams[qs.unescape(kv[1])] = qs.unescape(kv[2].replace(/"/g,''));
@@ -122,7 +126,7 @@ function oauther(config) {
         params.oauth_signature_method = this.signature_method;
         params.oauth_consumer_key = this.consumer.key;
         params.oauth_nonce = getNonce();
-        params.oauth_timestamp = (new Date().getTime()) / 1000.0;
+        params.oauth_timestamp = parseInt((new Date().getTime()) / 1000);
         params.oauth_version = this.version;
         var signature = calculateSignature(method, baseURL, params);
         params.oauth_signature = signature;
