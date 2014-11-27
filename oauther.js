@@ -188,7 +188,7 @@ function oauther(config) {
         var params = getAllParams(req);
 
         var expect = calculateSignature(method, baseURL, params);
-        console.log(params['oauth_signature_method']);
+
         return params['oauth_signature'] === expect;
     };
 
