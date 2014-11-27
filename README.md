@@ -51,6 +51,8 @@ req.header('Authorization', signature.toHeader());
 // query formatted signature
 var query = signature.toQuery();
 
+// oauth parameters as json object
+var params = signature.toObject();
 ...
 
 // validate an incoming request
