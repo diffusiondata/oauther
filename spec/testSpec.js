@@ -20,10 +20,9 @@ describe('oauther', function() {
             method : 'GET'
         };
 
-        it('generates and validates the signature', function() {
-            var oauth = oauther(config);
-            var sig = oauth.sign(request);
+        var oauth = oauther(config);
 
+        it('generates and validates the signature', function() {
             var header = sig.toHeader();
 
             when(req.header).isCalledWith('Authorization').thenReturn(header);
@@ -36,9 +35,6 @@ describe('oauther', function() {
         });
 
         it('validates a known signature', function() {
-            var oauth = oauther(config);
-            var sig = oauth.sign(request);
-
             var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="HMAC-SHA1",oauth_signature="Ry03%2BNtdAvaW0wUfFZ3mTfwqyPk%3D"';
 
             when(req.header).isCalledWith('Authorization').thenReturn(header);
@@ -64,8 +60,9 @@ describe('oauther', function() {
             method : 'GET'
         };
 
+        var oauth = oauther(config);
+
         it('generates and validates the signature', function() {
-            var oauth = oauther(config);
             var sig = oauth.sign(request);
 
             var header = sig.toHeader();
@@ -80,9 +77,6 @@ describe('oauther', function() {
         });
 
         it('validates a known signature', function() {
-            var oauth = oauther(config);
-            var sig = oauth.sign(request);
-
             var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="PLAINTEXT",oauth_signature="abcd1234%26"';
 
             when(req.header).isCalledWith('Authorization').thenReturn(header);
