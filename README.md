@@ -11,6 +11,13 @@ Requirements
 - Express
 - Node
 
+Installation
+------------
+
+```
+npm install oauther
+```
+
 Usage
 -----
 

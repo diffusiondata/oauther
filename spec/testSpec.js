@@ -1,13 +1,13 @@
 var oauther = require('../oauther.js');
 var when = require('saywhen');
 
-describe('oauther tests', function() {
+describe('oauther', function() {
     var req = jasmine.createSpyObj('req', ['header'])
 
     var consumer_key = 'oauthertest';
     var consumer_secret = 'abcd1234';
 
-    describe('HMAC-SHA1 tests', function() {
+    describe('HMAC-SHA1', function() {
         var config = {
             consumer : { key : consumer_key, secret : consumer_secret },
             signature_method : 'HMAC-SHA1',
@@ -51,7 +51,7 @@ describe('oauther tests', function() {
         });
     });
 
-    describe('PLAINTEXT tests', function() {
+    describe('PLAINTEXT', function() {
         var config = {
             consumer : { key : consumer_key, secret : consumer_secret },
             signature_method : 'PLAINTEXT',

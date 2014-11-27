@@ -158,13 +158,13 @@ function oauther(config) {
      * Sign OAuth request
      * @param  {Object} request data
      * {
-     *      hostname,
-     *      port, // optional
-     *      path,
-     *      protocol, // default 'http'
-     *      query, // query string
-     *      method,
-     *      body
+     *     hostname : 'example.com',
+     *     method : 'GET',
+     *     path : '/path/to/url',
+     *     port : 80, // optional
+     *     protocol : 'http', // optional, default 'http'
+     *     query, : { 'gaius' : 'baltar' },// optional, query string as json
+     *     body : { 'kara' : 'thrace' } // optional, form encoded body as json
      * }
      * @return {Object} OAuth data object
      */
@@ -177,6 +177,11 @@ function oauther(config) {
         return oauthSignature(oauthParams);
     };
 
+    /**
+     * A http request to validate
+     * @param  {Object} http request
+     * @return {Object} true if the signature is valid
+     */
     this.validate = function(req) {
         var method = req.method;
         var baseURL = parseURL(req);
