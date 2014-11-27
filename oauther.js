@@ -145,10 +145,6 @@ function oauther(config) {
             var hmac = crypto.createHmac('sha1', keyString);
             return hmac.update(baseString).digest('base64');
         }
-        else if (params['oauth_signature_method'] === 'RSA-SHA1') {
-            var rsa = crypto.createSign('RSA-SHA1');
-            return rsa.update(baseString).sign(csecret, 'base64');
-        }
         else {
             throw 'oauther :: Unsupported signature method : ' + params['oauth_signature_method'];
         }
