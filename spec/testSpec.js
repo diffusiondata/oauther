@@ -23,6 +23,7 @@ describe('oauther', function() {
         var oauth = oauther(config);
 
         it('generates and validates the signature', function() {
+            var sig = oauth.sign(request);
             var header = sig.toHeader();
 
             when(req.header).isCalledWith('Authorization').thenReturn(header);
@@ -64,7 +65,6 @@ describe('oauther', function() {
 
         it('generates and validates the signature', function() {
             var sig = oauth.sign(request);
-
             var header = sig.toHeader();
 
             when(req.header).isCalledWith('Authorization').thenReturn(header);
