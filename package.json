@@ -1,16 +1,16 @@
 {
   "name": "oauther",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "OAuth 1.0 signature generation and validation",
   "keywords": [
     "oauth",
     "signature",
     "security"
   ],
-  "homepage": "https://github.com/tommclaughlan/oauther",
+  "homepage": "https://github.com/pushtechnology/oauther",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tommclaughlan/oauther.git"
+    "url": "https://github.com/pushtechnology/oauther.git"
   },
   "author": "Tom McLaughlan",
   "license": "Apache-2.0",
