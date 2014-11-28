@@ -75,8 +75,3 @@ var request = {
     body : { 'kara' : 'thrace' } // optional, form encoded body as json
 };
 ```
-
-
-Notes
------
-TODO: Add support for RSA-SHA1. Add support for plain Node.js http.
