@@ -1,6 +1,6 @@
 oauther
 =======
-[![Build Status](https://travis-ci.org/tommclaughlan/oauther.svg?branch=master)](https://travis-ci.org/tommclaughlan/oauther)
+[![Build Status](https://travis-ci.org/pushtechnology/oauther.svg?branch=master)](https://travis-ci.org/pushtechnology/oauther)
 [![npm version](https://badge.fury.io/js/oauther.svg)](http://badge.fury.io/js/oauther)
 
 Simple OAuth 1.0 signature generation/validation.
