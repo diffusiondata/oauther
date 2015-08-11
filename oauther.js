@@ -85,12 +85,14 @@ function oauther(config) {
     function getOAuthHeaderParams(req) {
         var oauthParams = {};
 
-        if(req.header && req.header('Authorization').match(/^OAuth/)) {
-            var params = req.header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
-            params.forEach(function(p) {
-                var kv = p.match(/([^=\s]+)="([^"]*)"/);
-                oauthParams[qs.unescape(kv[1])] = qs.unescape(kv[2].replace(/"/g,''));
-            });
+        if(req.header) {
+            if (req.header('Authorization') && req.header('Authorization').match(/^OAuth/)) {
+                var params = req.header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
+                params.forEach(function(p) {
+                    var kv = p.match(/([^=\s]+)="([^"]*)"/);
+                    oauthParams[qs.unescape(kv[1])] = qs.unescape(kv[2].replace(/"/g,''));
+                });
+            }
         }
         return oauthParams;
     };
@@ -183,6 +185,10 @@ function oauther(config) {
      * @return {Object} true if the signature is valid
      */
     this.validate = function(req) {
+        if (req.header('Authorization') === undefined) {
+            return false;
+        }
+
         var method = req.method;
         var baseURL = parseURL(req);
         var params = getAllParams(req);

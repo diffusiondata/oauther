@@ -30,7 +30,6 @@ describe('HMAC-SHA1', function() {
         var sig = oauth.sign(request);
         var header = sig.toHeader();
 
-        var req = jasmine.createSpyObj('req', ['header']);
         when(req.header).isCalledWith('Authorization').thenReturn(header);
         req.method = 'GET';
         req.hostname = 'example.com';
@@ -52,6 +51,16 @@ describe('HMAC-SHA1', function() {
         req.query = {test : 'data'};
 
         expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('rejects when no signature is present', function() {
+        when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(oauth.validate(req)).toEqual(false);
     });
 });
 

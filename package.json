@@ -1,6 +1,6 @@
 {
   "name": "oauther",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "OAuth 1.0 signature generation and validation",
   "keywords": [
     "oauth",
@@ -27,6 +27,6 @@
   "dependencies": {},
   "devDependencies": {
     "jasmine": "~2.1.0",
-    "saywhen": "0.0.2"
+    "saywhen": "1.0.0"
   }
 }
