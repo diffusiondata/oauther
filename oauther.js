@@ -100,7 +100,8 @@ function oauther(config) {
     function parseURL(req) {
         var host = req.hostname || req.header('Host');
         var port = req.port;
-        var path = req.path;
+        var mount = req.baseUrl || '';
+        var path = req.path || '';
 
         var baseURL = (req.protocol ? req.protocol : 'http') + '://' + host;
 
@@ -108,7 +109,7 @@ function oauther(config) {
             baseURL += ':' + port;
         }
 
-        baseURL += path;
+        baseURL += mount + path;
 
         return baseURL;
     };

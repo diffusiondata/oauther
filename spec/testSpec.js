@@ -40,6 +40,39 @@ describe('HMAC-SHA1', function() {
         expect(oauth.validate(req)).toEqual(true);
     });
 
+    it('generates and validates the signature, with req.baseUrl', function() {
+        request.path = '/base/oauther';
+
+        var sig = oauth.sign(request);
+        var header = sig.toHeader();
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+        req.baseUrl = '/base';
+
+        expect(sig.signature_method).toEqual('HMAC-SHA1');
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('generates and validates the signature, with req.baseUrl and no path', function() {
+        request.path = '/base';
+
+        var sig = oauth.sign(request);
+        var header = sig.toHeader();
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.baseUrl = '/base';
+
+        expect(sig.signature_method).toEqual('HMAC-SHA1');
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
     it('validates a known signature', function() {
         var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="HMAC-SHA1",oauth_signature="Ry03%2BNtdAvaW0wUfFZ3mTfwqyPk%3D"';
 
@@ -109,5 +142,15 @@ describe('PLAINTEXT', function() {
         req.path = '/oauther';
 
         expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('rejects when no signature is present', function() {
+        when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(oauth.validate(req)).toEqual(false);
     });
 });
