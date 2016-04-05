@@ -131,6 +131,9 @@ function oauther(config) {
         params.oauth_nonce = getNonce();
         params.oauth_timestamp = parseInt((new Date().getTime()) / 1000);
         params.oauth_version = this.version;
+        if(config.token) {
+            params.oauth_token = config.token.key;
+        }
         var signature = calculateSignature(method, baseURL, params);
         params.oauth_signature = signature;
         return params;
