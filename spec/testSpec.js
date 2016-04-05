@@ -4,6 +4,9 @@ var when = require('saywhen');
 var consumer_key = 'oauthertest';
 var consumer_secret = 'abcd1234';
 
+var token_key = 'tsetrehtuao';
+var token_secret = '4321dcba';
+
 describe('HMAC-SHA1', function() {
 
     var config, request, oauth, req;
@@ -95,6 +98,38 @@ describe('HMAC-SHA1', function() {
 
         expect(oauth.validate(req)).toEqual(false);
     });
+
+    it('generates and validates the signature with a configured oauth_token', function() {
+        config.token = { key : token_key, secret : token_secret };
+        oauth = oauther(config);
+
+        var sig = oauth.sign(request);
+        var header = sig.toHeader();
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(sig.signature_method).toEqual('HMAC-SHA1');
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('validates a known signature with a configured oauth_token', function() {
+        config.token = { key : token_key, secret : token_secret };
+        oauth = oauther(config);
+
+        var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_token="tsetrehtuao",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="HMAC-SHA1",oauth_signature="2oA72F2tOQBGyITCgaDr4p3bayQ="';
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(oauth.validate(req)).toEqual(true);
+    });
 });
 
 describe('PLAINTEXT', function() {
@@ -152,5 +187,37 @@ describe('PLAINTEXT', function() {
         req.path = '/oauther';
 
         expect(oauth.validate(req)).toEqual(false);
+    });
+
+    it('generates and validates the signature with a configured oauth_token', function() {
+        config.token = { key : token_key, secret : token_secret };
+        oauth = oauther(config);
+
+        var sig = oauth.sign(request);
+        var header = sig.toHeader();
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(sig.signature_method).toEqual('PLAINTEXT');
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('validates a known signature with a configured oauth_token', function() {
+        config.token = { key : token_key, secret : token_secret };
+        oauth = oauther(config);
+
+        var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_token="tsetrehtuao",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="PLAINTEXT",oauth_signature="abcd1234&4321dcba"';
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(oauth.validate(req)).toEqual(true);
     });
 });
