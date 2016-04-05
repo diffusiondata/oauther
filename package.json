@@ -27,6 +27,6 @@
   "dependencies": {},
   "devDependencies": {
     "jasmine": "~2.1.0",
-    "saywhen": "1.0.0"
+    "saywhen": "1.1.0"
   }
 }
