@@ -57,7 +57,7 @@ function oauther(config) {
         param = qs.unescape(param);
 
         var params = param.split('&');
-        for(var i=0; i<params.length; i++) {
+        for (var i=0; i<params.length; i++) {
             var key = params[i].split('=')[0];
             var val = params[i].split('=')[1];
             result[key] = val;
@@ -85,7 +85,7 @@ function oauther(config) {
     function getOAuthHeaderParams(req) {
         var oauthParams = {};
 
-        if(req.header) {
+        if (req.header) {
             if (req.header('Authorization') && req.header('Authorization').match(/^OAuth/)) {
                 var params = req.header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
                 params.forEach(function(p) {
@@ -118,7 +118,7 @@ function oauther(config) {
         var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var nonce = '';
 
-        for(var i = 0; i < this.nonce_length; i++) {
+        for (var i = 0; i < this.nonce_length; i++) {
             nonce += chars[parseInt(Math.random() * chars.length, 10)];
         }
 
@@ -131,7 +131,7 @@ function oauther(config) {
         params.oauth_nonce = getNonce();
         params.oauth_timestamp = parseInt((new Date().getTime()) / 1000);
         params.oauth_version = this.version;
-        if(config.token) {
+        if (config.token) {
             params.oauth_token = config.token.key;
         }
         var signature = calculateSignature(method, baseURL, params);
