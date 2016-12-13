@@ -1,6 +1,21 @@
 var crypto = require('crypto');
 var qs = require('querystring');
 
+/*
+ * RFC 3986 compliant encoding.
+ * We require this for creating the base string used in calculating signatures.
+ * qs.escape alone leaves the extra special characters untouched.
+ */
+function encodeParameter(param) {
+    return qs.escape(param).replace(/[!'()*]/g, function(c) {
+        return '%' + c.charCodeAt(0).toString(16).toUpperCase();
+    });
+};
+
+function decodeParameter(param) {
+    return qs.unescape(param);
+};
+
 function generateParameterString(params, ignore_sig) {
     var paramString = '';
 
@@ -8,7 +23,7 @@ function generateParameterString(params, ignore_sig) {
         if (!ignore_sig || key !== 'oauth_signature') {
             var val = params[key];
             paramString += (paramString ? '&' : '');
-            paramString += key + '=' + qs.escape(val);
+            paramString += key + '=' + encodeParameter(val);
         }
     });
     return paramString;
@@ -18,7 +33,7 @@ function getOAuthHeader(params) {
     var header = '';
 
     for (var key in params) {
-        header += (header ? ', ' : '') + key + '="' + qs.escape(params[key])+'"';
+        header += (header ? ', ' : '') + key + '="' + encodeParameter(params[key])+'"';
     }
     return 'OAuth '+header;
 };
@@ -54,7 +69,7 @@ function oauther(config) {
     function parseParameterString(param) {
         var result = {};
 
-        param = qs.unescape(param);
+        param = decodeParameter(param);
 
         var params = param.split('&');
         for (var i=0; i<params.length; i++) {
@@ -90,7 +105,7 @@ function oauther(config) {
                 var params = req.header('Authorization').match(/(oauth_)([^=\s]+)="([^"]*)"([^,]*)/g);
                 params.forEach(function(p) {
                     var kv = p.match(/([^=\s]+)="([^"]*)"/);
-                    oauthParams[qs.unescape(kv[1])] = qs.unescape(kv[2].replace(/"/g,''));
+                    oauthParams[decodeParameter(kv[1])] = decodeParameter(kv[2].replace(/"/g,''));
                 });
             }
         }
@@ -140,13 +155,13 @@ function oauther(config) {
     };
 
     function calculateSignature(method, baseURL, params) {
-        var baseString = method.toUpperCase() + '&' + qs.escape(baseURL) + '&' +
-            qs.escape(generateParameterString(params, true));
+        var baseString = method.toUpperCase() + '&' + encodeParameter(baseURL) + '&' +
+            encodeParameter(generateParameterString(params, true));
 
         var csecret = config.consumer ? config.consumer.secret : '';
         var tsecret = config.token ? config.token.secret : '';
 
-        var keyString = qs.escape(csecret) + '&' + qs.escape(tsecret);
+        var keyString = encodeParameter(csecret) + '&' + encodeParameter(tsecret);
 
         if (params['oauth_signature_method'] === 'PLAINTEXT') {
             return keyString;
@@ -178,7 +193,7 @@ function oauther(config) {
         var method = req.method;
         var baseURL = parseURL(req);
         var params = params = getAllParams(req);
-        var oauthParams = generateSignature(method, baseURL, {});
+        var oauthParams = generateSignature(method, baseURL, params);
 
         return oauthSignature(oauthParams);
     };

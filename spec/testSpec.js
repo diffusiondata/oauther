@@ -21,7 +21,10 @@ describe('HMAC-SHA1', function() {
         request = {
             hostname : 'example.com',
             path : '/oauther',
-            method : 'GET'
+            method : 'GET',
+            body : {
+                parameter : 'Spec!al(Char*cters[])'
+            }
         };
 
         oauth = oauther(config);
@@ -38,6 +41,9 @@ describe('HMAC-SHA1', function() {
         req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(sig.signature_method).toEqual('HMAC-SHA1');
         expect(oauth.validate(req)).toEqual(true);
@@ -55,6 +61,9 @@ describe('HMAC-SHA1', function() {
         req.protocol = 'http';
         req.path = '/oauther';
         req.baseUrl = '/base';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(sig.signature_method).toEqual('HMAC-SHA1');
         expect(oauth.validate(req)).toEqual(true);
@@ -71,6 +80,9 @@ describe('HMAC-SHA1', function() {
         req.hostname = 'example.com';
         req.protocol = 'http';
         req.baseUrl = '/base';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(sig.signature_method).toEqual('HMAC-SHA1');
         expect(oauth.validate(req)).toEqual(true);
@@ -85,6 +97,21 @@ describe('HMAC-SHA1', function() {
         req.protocol = 'http';
         req.path = '/oauther';
         req.query = {test : 'data'};
+
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('validates a known signature with special characters in the body', function() {
+        var header = 'OAuth oauth_nonce="3355101671",oauth_signature="lW%2BHyvNIjJD%2BW%2BLW6sUsezazIyI%3D",oauth_consumer_key="oauthertest",oauth_timestamp="1481625077",oauth_signature_method="HMAC-SHA1",oauth_version="1.0"';
+
+        when(req.header).isCalledWith('Authorization').thenReturn(header);
+        req.method = 'PUT';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(oauth.validate(req)).toEqual(true);
     });
@@ -132,6 +159,9 @@ describe('HMAC-SHA1', function() {
         req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(sig.signature_method).toEqual('HMAC-SHA1');
         expect(oauth.validate(req)).toEqual(true);
@@ -166,7 +196,10 @@ describe('PLAINTEXT', function() {
         request = {
             hostname : 'example.com',
             path : '/oauther',
-            method : 'GET'
+            method : 'GET',
+            body : {
+                parameter : 'Spec!al(Char*cters[])'
+            }
         };
 
         oauth = oauther(config);
@@ -183,6 +216,9 @@ describe('PLAINTEXT', function() {
         req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(sig.signature_method).toEqual('PLAINTEXT');
         expect(oauth.validate(req)).toEqual(true);
@@ -242,6 +278,9 @@ describe('PLAINTEXT', function() {
         req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
+        req.body = {
+            parameter : 'Spec!al(Char*cters[])'
+        };
 
         expect(sig.signature_method).toEqual('PLAINTEXT');
         expect(oauth.validate(req)).toEqual(true);
