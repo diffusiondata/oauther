@@ -89,8 +89,29 @@ describe('HMAC-SHA1', function() {
         expect(oauth.validate(req)).toEqual(true);
     });
 
-    it('rejects when no signature is present', function() {
+    it('validates a known signature from the query string', function() {
         when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+
+        req.query = {
+            oauth_version : '1.0',
+            oauth_consumer_key : 'oauthertest',
+            oauth_timestamp : '1417000000',
+            oauth_nonce : '12345678',
+            oauth_signature_method : 'HMAC-SHA1',
+            oauth_signature : 'Ry03+NtdAvaW0wUfFZ3mTfwqyPk=',
+            test : 'data'
+        };
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('fails if no authorization header or query params', function() {
+        when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+
         req.method = 'GET';
         req.hostname = 'example.com';
         req.protocol = 'http';
@@ -179,8 +200,28 @@ describe('PLAINTEXT', function() {
         expect(oauth.validate(req)).toEqual(true);
     });
 
-    it('rejects when no signature is present', function() {
+    it('validates a known signature from the query string', function() {
         when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+
+        req.query = {
+            oauth_version : '1.0',
+            oauth_consumer_key : 'oauthertest',
+            oauth_timestamp : '1417000000',
+            oauth_nonce : '12345678',
+            oauth_signature_method : 'PLAINTEXT',
+            oauth_signature : 'abcd1234&'
+        };
+        req.method = 'GET';
+        req.hostname = 'example.com';
+        req.protocol = 'http';
+        req.path = '/oauther';
+
+        expect(oauth.validate(req)).toEqual(true);
+    });
+
+    it('fails if no authorization header or query params', function() {
+        when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+
         req.method = 'GET';
         req.hostname = 'example.com';
         req.protocol = 'http';

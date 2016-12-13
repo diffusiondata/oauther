@@ -189,13 +189,13 @@ function oauther(config) {
      * @return {Object} true if the signature is valid
      */
     this.validate = function(req) {
-        if (req.header('Authorization') === undefined) {
-            return false;
-        }
-
         var method = req.method;
         var baseURL = parseURL(req);
         var params = getAllParams(req);
+
+        if (!params['oauth_signature']) {
+            return false;
+        }
 
         var expect = calculateSignature(method, baseURL, params);
 
