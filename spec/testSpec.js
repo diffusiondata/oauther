@@ -37,8 +37,8 @@ describe('HMAC-SHA1', function() {
         var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
         req.body = {
@@ -56,8 +56,8 @@ describe('HMAC-SHA1', function() {
         var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
         req.baseUrl = '/base';
@@ -76,8 +76,8 @@ describe('HMAC-SHA1', function() {
         var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.baseUrl = '/base';
         req.body = {
@@ -92,8 +92,8 @@ describe('HMAC-SHA1', function() {
         var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="HMAC-SHA1",oauth_signature="Ry03%2BNtdAvaW0wUfFZ3mTfwqyPk%3D"';
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
         req.query = {test : 'data'};
@@ -105,6 +105,7 @@ describe('HMAC-SHA1', function() {
         var header = 'OAuth oauth_nonce="3355101671",oauth_signature="lW%2BHyvNIjJD%2BW%2BLW6sUsezazIyI%3D",oauth_consumer_key="oauthertest",oauth_timestamp="1481625077",oauth_signature_method="HMAC-SHA1",oauth_version="1.0"';
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'PUT';
         req.hostname = 'example.com';
         req.protocol = 'http';
@@ -118,6 +119,7 @@ describe('HMAC-SHA1', function() {
 
     it('validates a known signature from the query string', function() {
         when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
 
         req.query = {
             oauth_version : '1.0',
@@ -129,7 +131,6 @@ describe('HMAC-SHA1', function() {
             test : 'data'
         };
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 
@@ -138,9 +139,9 @@ describe('HMAC-SHA1', function() {
 
     it('fails if no authorization header or query params', function() {
         when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
 
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 
@@ -155,8 +156,8 @@ describe('HMAC-SHA1', function() {
         var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
         req.body = {
@@ -174,8 +175,8 @@ describe('HMAC-SHA1', function() {
         var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_token="tsetrehtuao",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="HMAC-SHA1",oauth_signature="2oA72F2tOQBGyITCgaDr4p3bayQ="';
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 
@@ -212,8 +213,8 @@ describe('PLAINTEXT', function() {
         var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
         req.body = {
@@ -228,8 +229,8 @@ describe('PLAINTEXT', function() {
         var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="PLAINTEXT",oauth_signature="abcd1234%26"';
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 
@@ -238,6 +239,7 @@ describe('PLAINTEXT', function() {
 
     it('validates a known signature from the query string', function() {
         when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
 
         req.query = {
             oauth_version : '1.0',
@@ -248,7 +250,6 @@ describe('PLAINTEXT', function() {
             oauth_signature : 'abcd1234&'
         };
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 
@@ -257,9 +258,9 @@ describe('PLAINTEXT', function() {
 
     it('fails if no authorization header or query params', function() {
         when(req.header).isCalledWith('Authorization').thenReturn(undefined);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
 
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 
@@ -274,8 +275,8 @@ describe('PLAINTEXT', function() {
         var header = sig.toHeader();
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
         req.body = {
@@ -293,8 +294,8 @@ describe('PLAINTEXT', function() {
         var header = 'OAuth realm="",oauth_version="1.0",oauth_consumer_key="oauthertest",oauth_token="tsetrehtuao",oauth_timestamp="1417000000",oauth_nonce="12345678",oauth_signature_method="PLAINTEXT",oauth_signature="abcd1234&4321dcba"';
 
         when(req.header).isCalledWith('Authorization').thenReturn(header);
+        when(req.header).isCalledWith('Host').thenReturn('example.com');
         req.method = 'GET';
-        req.hostname = 'example.com';
         req.protocol = 'http';
         req.path = '/oauther';
 

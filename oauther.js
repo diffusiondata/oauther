@@ -113,7 +113,9 @@ function oauther(config) {
     };
 
     function parseURL(req) {
-        var host = req.hostname || req.header('Host');
+        // If we are in the express context, we will have req.header as a function.
+        // Express version 4 strips the port out of the req.hostname parameter incorrectly
+        var host = typeof req.header === 'function' ? req.header('Host') : req.hostname;
         var port = req.port;
         var mount = req.baseUrl || '';
         var path = req.path || '';
