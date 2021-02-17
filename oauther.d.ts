@@ -13,7 +13,7 @@ interface OAutherConfig {
 }
 
 interface Signature {
-    toObject(): string,
+    toObject(): SignatureObject,
     toHeader(): string,
     toForm(): string
 }
