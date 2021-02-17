@@ -69,14 +69,14 @@ function oauther(config) {
     function getAllParams(req) {
         var params = {};
 
-        for (var key in req.body) {
+        for (let key in req.body) {
             params[key] = req.body[key];
         }
-        for (var key in req.query) {
+        for (let key in req.query) {
             params[key] = req.query[key];
         }
         var oauthparams = getOAuthHeaderParams(req);
-        for (var key in oauthparams) {
+        for (let key in oauthparams) {
             params[key] = oauthparams[key];
         }
 
