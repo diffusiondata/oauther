@@ -10,11 +10,11 @@ function encodeParameter(param) {
     return qs.escape(param).replace(/[!'()*]/g, function(c) {
         return '%' + c.charCodeAt(0).toString(16).toUpperCase();
     });
-};
+}
 
 function decodeParameter(param) {
     return qs.unescape(param);
-};
+}
 
 function generateParameterString(params, ignore_sig) {
     var paramString = '';
@@ -27,7 +27,7 @@ function generateParameterString(params, ignore_sig) {
         }
     });
     return paramString;
-};
+}
 
 function getOAuthHeader(params) {
     var header = '';
@@ -36,7 +36,7 @@ function getOAuthHeader(params) {
         header += (header ? ', ' : '') + key + '="' + encodeParameter(params[key])+'"';
     }
     return 'OAuth '+header;
-};
+}
 
 function oauthSignature(signatureParams) {
     var params = signatureParams;
@@ -56,7 +56,7 @@ function oauthSignature(signatureParams) {
     }
 
     return self;
-};
+}
 
 function oauther(config) {
     var self = this;
@@ -81,7 +81,7 @@ function oauther(config) {
         }
 
         return params;
-    };
+    }
 
     function getOAuthHeaderParams(req) {
         var oauthParams = {};
@@ -96,7 +96,7 @@ function oauther(config) {
             }
         }
         return oauthParams;
-    };
+    }
 
     function parseURL(req) {
         // If we are in the express context, we will have req.header as a function.
@@ -115,7 +115,7 @@ function oauther(config) {
         baseURL += mount + path;
 
         return baseURL;
-    };
+    }
 
     function getNonce() {
         var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -140,7 +140,7 @@ function oauther(config) {
         var signature = calculateSignature(method, baseURL, params);
         params.oauth_signature = signature;
         return params;
-    };
+    }
 
     function calculateSignature(method, baseURL, params) {
         var baseString = method.toUpperCase() + '&' + encodeParameter(baseURL) + '&' +
@@ -161,7 +161,7 @@ function oauther(config) {
         else {
             throw 'oauther :: Unsupported signature method : ' + params['oauth_signature_method'];
         }
-    };
+    }
 
     /**
      * Sign OAuth request
@@ -206,6 +206,6 @@ function oauther(config) {
     };
 
     return self;
-};
+}
 
 module.exports = oauther;
