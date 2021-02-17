@@ -179,7 +179,7 @@ function oauther(config) {
 
     /**
      * Sign OAuth request
-     * @param  {Object} request data
+     * @param  {Object} req data
      * {
      *     hostname : 'example.com',
      *     method : 'GET',
@@ -202,7 +202,7 @@ function oauther(config) {
 
     /**
      * A http request to validate
-     * @param  {Object} http request
+     * @param  {Object} req request
      * @return {Object} true if the signature is valid
      */
     this.validate = function(req) {
