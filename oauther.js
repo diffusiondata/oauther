@@ -66,20 +66,6 @@ function oauther(config) {
     this.nonce_length = config.nonce_length || 32;
     this.version = '1.0';
 
-    function parseParameterString(param) {
-        var result = {};
-
-        param = decodeParameter(param);
-
-        var params = param.split('&');
-        for (var i=0; i<params.length; i++) {
-            var key = params[i].split('=')[0];
-            var val = params[i].split('=')[1];
-            result[key] = val;
-        }
-        return result;
-    };
-
     function getAllParams(req) {
         var params = {};
 
