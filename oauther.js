@@ -117,7 +117,7 @@ function oauther(config) {
         return baseURL;
     };
 
-    function getNonce(length) {
+    function getNonce() {
         var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var nonce = '';
 
