@@ -1,0 +1,18 @@
+{
+    "env": {
+        "commonjs": true,
+        "es2020": true,
+        "jasmine": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 10
+    },
+    "rules": {
+        "indent": "error",
+        "quotes": [
+            "error",
+            "single"
+        ]
+    }
+}
