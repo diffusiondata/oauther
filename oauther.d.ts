@@ -1,16 +1,3 @@
-type Protocol = 'http' | 'https';
-type Method =
-    | 'get' | 'GET'
-    | 'delete' | 'DELETE'
-    | 'head' | 'HEAD'
-    | 'options' | 'OPTIONS'
-    | 'post' | 'POST'
-    | 'put' | 'PUT'
-    | 'patch' | 'PATCH'
-    | 'purge' | 'PURGE'
-    | 'link' | 'LINK'
-    | 'unlink' | 'UNLINK';
-type SignatureMethod = 'HMAC-SHA1' | 'PLAINTEXT';
 
 interface OAutherConfig {
     consumer?: {
@@ -21,18 +8,18 @@ interface OAutherConfig {
         key: string,
         secret: string
     },
-    signature_method?: SignatureMethod,
+    signature_method?: string,
     nonce_length?: number
 }
 
 interface Signature {
-    toObject(): SignatureObject,
+    toObject(): string,
     toHeader(): string,
     toForm(): string
 }
 
 interface SignatureObject {
-    oauth_signature_method: SignatureMethod,
+    oauth_signature_method: string,
     oauth_consumer_key: string,
     oauth_nonce: string,
     oauth_timestamp: number,
@@ -43,10 +30,10 @@ interface SignatureObject {
 interface RequestDetails {
     baseUrl?: string,
     hostname?: string,
-    protocol?: Protocol,
+    protocol?: string,
     port?: number,
     path?: string,
-    method?: Method,
+    method?: string,
     body?: { [key: string]: any },
     query?: { [key: string]: any }
 }
