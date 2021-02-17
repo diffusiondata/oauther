@@ -135,7 +135,7 @@ function oauther(config) {
         var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         var nonce = '';
 
-        for (var i = 0; i < this.nonce_length; i++) {
+        for (var i = 0; i < self.nonce_length; i++) {
             nonce += chars[parseInt(Math.random() * chars.length, 10)];
         }
 
@@ -143,11 +143,11 @@ function oauther(config) {
     }
 
     function generateSignature(method, baseURL, params) {
-        params.oauth_signature_method = this.signature_method;
-        params.oauth_consumer_key = this.consumer.key;
+        params.oauth_signature_method = self.signature_method;
+        params.oauth_consumer_key = self.consumer.key;
         params.oauth_nonce = getNonce();
         params.oauth_timestamp = parseInt((new Date().getTime()) / 1000);
-        params.oauth_version = this.version;
+        params.oauth_version = self.version;
         if (config.token) {
             params.oauth_token = config.token.key;
         }
