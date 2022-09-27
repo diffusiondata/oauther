@@ -19,7 +19,8 @@
     "README.md",
     "LICENSE.txt",
     "oauther.js",
-    "spec"
+    "spec",
+    "oauther.d.ts"
   ],
   "scripts": {
     "test": "jasmine",
